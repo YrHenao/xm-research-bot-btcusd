@@ -1,0 +1,83 @@
+{
+  "mode": "simulation",
+  "account_currency": "USD",
+  "initial_equity": 10000,
+  "history_bars": 7000,
+  "train_fraction": 0.7,
+  "news": {
+    "required": false,
+    "path": null,
+    "before": 1800,
+    "after": 1800
+  },
+  "risk": {
+    "risk_per_trade": 0.0025,
+    "daily_loss": 0.02,
+    "max_positions": 2,
+    "max_open_risk": 0.005,
+    "max_age_seconds": 90,
+    "kill_file": "STOP"
+  },
+  "strategy": {
+    "warmup": 60,
+    "lookback": 300,
+    "pivot_wing": 3,
+    "tolerance_atr": 0.25,
+    "level_contacts": 2,
+    "fib_ratios": [
+      0.382,
+      0.5,
+      0.618
+    ],
+    "shoulder_tolerance_atr": 1.0,
+    "enabled": [
+      "levels",
+      "trend",
+      "fibonacci",
+      "three_lines",
+      "triangle",
+      "head_shoulders"
+    ],
+    "min_votes": 1,
+    "trend_frames": [
+      15,
+      60,
+      240
+    ],
+    "trend_period": 20,
+    "stop_loss_enabled": false,
+    "timeout_enabled": false,
+    "stop_atr": 2,
+    "reward_risk": 2,
+    "max_hold_minutes": 60
+  },
+  "symbols": {
+    "bitcoin": {
+      "broker_symbol": "BTCUSD",
+      "news_currencies": [
+        "USD",
+        "BTC"
+      ],
+      "max_spread": 30,
+      "slippage": 5,
+      "contract": {
+        "currency": "USD",
+        "contract_size": 1,
+        "quote_to_account": 1,
+        "volume_min": 0.01,
+        "volume_max": 10,
+        "volume_step": 0.01,
+        "min_stop": 10,
+        "margin_per_lot": 20000,
+        "commission_roundtrip": 0
+      }
+    }
+  },
+  "data_policy": {
+    "contract_verified": false,
+    "time_basis": "broker_server",
+    "spread_source": "current_snapshot_assumption",
+    "commission_source": "unverified",
+    "note": "Importar especificaciones desde MT4 antes del backtest de mercado."
+  }
+}

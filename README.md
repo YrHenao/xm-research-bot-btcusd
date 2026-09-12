@@ -120,4 +120,3 @@ copia del puente y un solo EA; el archivo de bloqueo evita EA simultáneos.
 - [Archivos MQL4 y carpeta común](https://docs.mql4.com/files/fileopen)
 - [OrderSend en MT4](https://docs.mql4.com/trading/ordersend)
 - [Tipo de cuenta](https://docs.mql4.com/account/accountinfointeger)
-

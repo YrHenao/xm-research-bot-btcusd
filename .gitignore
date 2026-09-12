@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+*.db*
+STOP
+report*.json
+synthetic*.csv
+mt5-demo-report.json
+*_m1.csv
+demo-state/
+reports/
+data/
+config.mt4.json
+*.ex4
+*.log
+*.egg-info/
