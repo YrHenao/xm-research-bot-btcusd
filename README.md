@@ -1,5 +1,10 @@
 # BTCUSD — investigación y prueba demo en XM MT4
 
+Para evaluar los filtros nativos use [REPETIR-BACKTEST.md](REPETIR-BACKTEST.md)
+y `python -m bot.native_replay`, con exportacion historica de M1/M15/H1/H4.
+Ese comando comparte la logica de filtros del puente y selecciona solo velas
+cerradas al instante de cada entrada. `replay` y `compare` siguen siendo legacy.
+
 **Correccion de filtros:** el puente demo usa 21 velas cerradas NATIVAS de MT4
 para cada filtro M15/H1/H4. Comprueba orden, precios, cierre y antiguedad.
 No reconstruye esos filtros desde M1 ni rellena minutos faltantes.
