@@ -45,13 +45,32 @@ class MT4Tests(unittest.TestCase):
             with patch('bot.mt4_bridge.decide',return_value=(side,{})):
                 row,_=command(cfg,meta,bars)
                 self.assertEqual(row[1:4],[123,'fixture','BTCUSD'])
-                self.assertEqual(row[5],side); self.assertEqual(row[-1],0); self.assertEqual(row[-2],2)
+                self.assertEqual(row[0],2); self.assertEqual(row[5],side)
+                self.assertEqual(row[7],3); self.assertEqual(row[8],0)
+                self.assertEqual(row[9],.00375)
 
     def test_stale_signal_and_timeout_rejected(self):
         cfg,bars,meta=self.fixture()
         with self.assertRaises(ValueError): command(cfg,{**meta,'server_time':meta['server_time']+120},bars)
         cfg['strategy']['timeout_enabled']=True
         with self.assertRaises(ValueError): command(cfg,meta,bars)
+
+    def test_deployment_sizing_and_target(self):
+        from bot.backtest import run
+        from bot.news import FileNews
+        cfg,bars,_=self.fixture()
+        cfg['symbols']['bitcoin']['slippage']=0
+        cfg['symbols']['bitcoin']['contract'].update(min_stop=0,margin_per_lot=1,volume_step=.01)
+        cfg['risk']['kill_file']=str(ROOT/'tests'/'NO_STOP')
+        cfg['risk']['risk_per_trade']=.00375
+        def once(history,strategy,enabled): return (1 if len(history)==60 else 0),{}
+        current=run({'bitcoin':bars},cfg,FileNews(None,required=False),signal_fn=once)['trades'][0]
+        self.assertAlmostEqual(current['lots'],4.68)  # floor((10000*.00375/8)/.01)*.01
+        self.assertAlmostEqual(current['target']-current['entry'],24)
+        cfg['risk']['risk_per_trade']=.0025; cfg['strategy']['reward_risk']=2
+        previous=run({'bitcoin':bars},cfg,FileNews(None,required=False),signal_fn=once)['trades'][0]
+        self.assertAlmostEqual(previous['lots'],3.12)
+        self.assertAlmostEqual(current['lots']/previous['lots'],1.5)
 
     def test_exposure_counts_floating_and_realized_separately(self):
         cfg,_,_=self.fixture(); cfg['symbols']['bitcoin']['contract']['margin_per_lot']=1000

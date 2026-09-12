@@ -59,6 +59,7 @@ class Tests(unittest.TestCase):
             for reason in ('target','timeout','end'):
                 with self.subTest(side=side,reason=reason):
                     c=cfg(); c['strategy']['stop_loss_enabled']=False
+                    c['strategy']['reward_risk']=2  # Legacy exit fixture, independent of deployment defaults.
                     c['strategy']['timeout_enabled']=True
                     c['strategy']['max_hold_minutes']=2 if reason=='timeout' else 60
                     bs=bars(63); t=bs[60].time
@@ -102,6 +103,7 @@ class Tests(unittest.TestCase):
             for reason in ('target','end'):
                 with self.subTest(side=side,reason=reason):
                     c=cfg(); c['strategy'].update(stop_loss_enabled=False,timeout_enabled=False,max_hold_minutes=1)
+                    c['strategy']['reward_risk']=2
                     bs=bars(65); t=bs[60].time
                     if reason=='target':
                         bs[64]=Bar(t+240,100,120 if side>0 else 102,80 if side<0 else 98,100,.2)

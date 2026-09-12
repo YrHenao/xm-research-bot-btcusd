@@ -61,23 +61,25 @@
       "max_spread": 40,
       "slippage": 5,
       "contract": {
-        "currency": "USD",
-        "contract_size": 1,
-        "quote_to_account": 1,
+        "contract_size": 1.0,
+        "quote_to_account": 1.0,
         "volume_min": 0.01,
-        "volume_max": 10,
+        "volume_max": 6105.0,
         "volume_step": 0.01,
-        "min_stop": 10,
-        "margin_per_lot": 20000,
-        "commission_roundtrip": 0
+        "min_stop": 0.0,
+        "margin_per_lot": 77.28,
+        "currency": "USD",
+        "commission_roundtrip": 0.0
       }
     }
   },
   "data_policy": {
-    "contract_verified": false,
+    "contract_verified": true,
     "time_basis": "broker_server",
     "spread_source": "current_snapshot_assumption",
-    "commission_source": "unverified",
-    "note": "Importar especificaciones desde MT4 antes del backtest de mercado."
+    "commission_source": "explicit_user_assumption",
+    "commission_roundtrip": 0.0,
+    "server": "XMGlobal-Demo 2",
+    "note": "Contrato y margen actuales, spread constante supuesto; no incluye swaps ni stop-out."
   }
 }

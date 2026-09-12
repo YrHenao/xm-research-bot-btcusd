@@ -1,13 +1,15 @@
 # BTCUSD — investigación y prueba demo en XM MT4
 
 Adaptación del núcleo de `xm-research-bot` de oro para BTCUSD. Mantiene los seis
-detectores Python, filtros M15/H1/H4, riesgo nominal 0,25 %, target 2:1, noticias
+detectores Python, filtros M15/H1/H4, riesgo nominal 0,375 %, target 3:1, noticias
 desactivadas y stop/timeout opcionales (ambos desactivados en el ejemplo).
 
-**Estado:** código Python probado; exportación del historial real pendiente.
-Los archivos MQL4 necesitan compilarse y verificarse en MetaEditor. No se ha
-ejecutado un backtest con precios BTCUSD de XM ni una operación MT4 con este
-proyecto. No se presentan resultados sintéticos como resultados de mercado.
+**Version actual:** lotaje teorico 1,5x (antes de redondeo), target 3:1 y spread
+maximo 40 USD. [Activacion demo paso a paso](ACTIVAR-DEMO.md).
+Se exportaron 65.269 velas de XM. La configuracion anterior (0,25 %, 2:1) tuvo
+nueve operaciones positivas; ese resultado no corresponde a esta configuracion.
+Los archivos MQL4 necesitan compilarse y verificarse en MetaEditor. Todavia no
+se ha confirmado una operacion MT4 ejecutada con este proyecto.
 
 ## 1. Exportar todo el historial disponible en MT4
 
@@ -71,7 +73,7 @@ Para la evaluación exploratoria 70/30 y cada detector:
 .\.venv\Scripts\python.exe -m bot evaluate --config config.mt4.json --data bitcoin=data/btcusd_m1.csv --out reports/evaluation.json
 ```
 
-Los valores iniciales para BTC heredados del proyecto son spread máximo 30 y
+Los valores actuales para BTC son spread máximo 40 y
 slippage 5, en unidades de precio. Son supuestos configurables, no condiciones
 verificadas de XM. El contrato importado y margen corresponden al momento de
 exportación. Las velas usan hora del servidor, **no se etiquetan como UTC**:
@@ -103,7 +105,7 @@ No requiere DLL, WebRequest ni contraseñas en archivos.
    slippage y comisión: **los parámetros de costes/riesgo del EA se configuran
    en MT4**, no se transfieren desde JSON. Deben coincidir con el backtest.
 
-El EA acepta únicamente cuenta demo USD, BTCUSD, target 2:1 y señales recientes.
+El EA acepta únicamente cuenta demo USD, BTCUSD, target 3:1 y señales recientes.
 Comprueba identidad de cuenta, spread, margen y ausencia de posiciones u órdenes
 antes de abrir. Conserva stop nominal para dimensionar los lotes y envía SL=0
 cuando se desactiva. No implementa cierre por timeout ni modifica operaciones

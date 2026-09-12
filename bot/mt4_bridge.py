@@ -16,7 +16,7 @@ def command(cfg,meta,bars):
     import_config(cfg,meta,bars,0.)  # Verify pairing and demo contract, no silent partial file.
     if cfg['strategy']['timeout_enabled']: raise ValueError('Puente demo no implementa timeout; desactivelo')
     if cfg['news']['required'] or cfg['news']['path']: raise ValueError('Esta prueba requiere noticias desactivadas')
-    if cfg['strategy']['reward_risk']!=2: raise ValueError('El EA de esta prueba usa target 2:1')
+    if cfg['strategy']['reward_risk']!=3: raise ValueError('El EA de esta version usa target 3:1')
     if len(bars)<cfg['strategy']['warmup']: raise ValueError('Historial insuficiente')
     close=bars[-1].time+60
     if not 0<=meta['server_time']-close<=cfg['risk']['max_age_seconds']: raise ValueError('Datos antiguos/mercado cerrado')
@@ -25,8 +25,8 @@ def command(cfg,meta,bars):
     distance=max(sum(b.high-b.low for b in bars[-14:])/14*cfg['strategy']['stop_atr'],
                  meta['min_stop'],cfg['symbols']['bitcoin']['contract']['min_stop'])
     if not math.isfinite(distance) or distance<=0: raise ValueError('Distancia invalida')
-    return [1,meta['account_login'],meta['server'],meta['symbol'],close,side,distance,2,
-            int(cfg['strategy']['stop_loss_enabled'])],explanation
+    return [2,meta['account_login'],meta['server'],meta['symbol'],close,side,distance,3,
+            int(cfg['strategy']['stop_loss_enabled']),cfg['risk']['risk_per_trade']],explanation
 
 
 def main():

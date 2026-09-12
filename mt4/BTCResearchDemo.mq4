@@ -1,9 +1,9 @@
 #property strict
 #include "BTCResearchExport.mqh"
 input bool EnableDemoOrders=false;
-input double RiskPerTrade=0.0025;
+input double RiskPerTrade=0.00375; // 1.5 x presupuesto anterior 0.0025, redondeo a paso del broker
 input double DailyLoss=0.02;
-input double MaxSpread=30.0;
+input double MaxSpread=40.0;
 input double SlippagePrice=5.0;
 input double CommissionRoundtrip=0.0; // Supuesto explicito USD/lote, confirmar con broker
 int accountId,lockHandle=INVALID_HANDLE;
@@ -40,10 +40,12 @@ void OnTimer() {
    int side=(int)FileReadNumber(f);
    double distance=FileReadNumber(f), ratio=FileReadNumber(f);
    int stopEnabled=(int)FileReadNumber(f);
+   double requestedRisk=FileReadNumber(f);
    FileClose(f);
-   if(version!=1 || login!=accountId || server!=serverId || symbol!=Symbol() || bar!=closed
+   if(version!=2 || login!=accountId || server!=serverId || symbol!=Symbol() || bar!=closed
       || (side!=1 && side!=-1) || !MathIsValidNumber(distance) || distance<=0
-      || !MathIsValidNumber(ratio) || ratio!=2.0 || (stopEnabled!=0 && stopEnabled!=1)) return;
+      || !MathIsValidNumber(ratio) || ratio!=3.0 || (stopEnabled!=0 && stopEnabled!=1)
+      || !MathIsValidNumber(requestedRisk) || MathAbs(requestedRisk-RiskPerTrade)>0.000000001) return;
    datetime now=TimeCurrent(),tickTime=(datetime)MarketInfo(Symbol(),MODE_TIME);
    if(now<bar || now-bar>90 || now<tickTime || now-tickTime>90) return;
    string key="BTCResearch_bar_"+IntegerToString(accountId)+"_"+IntegerToString((int)bar);
