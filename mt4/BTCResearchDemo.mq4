@@ -1,6 +1,7 @@
 #property strict
 #include "BTCResearchExport.mqh"
 input bool EnableDemoOrders=false;
+input int HistoryBars=20000;
 input double RiskPerTrade=0.00375; // 1.5 x presupuesto anterior 0.0025, redondeo a paso del broker
 input double DailyLoss=0.02;
 input double MaxSpread=40.0;
@@ -9,9 +10,10 @@ input double CommissionRoundtrip=0.0; // Supuesto explicito USD/lote, confirmar 
 int accountId,lockHandle=INVALID_HANDLE;
 string serverId,uncertain;
 datetime exported=0;
+uint lastExport=0;
 
 int OnInit() {
-   if(!DemoBTC() || RiskPerTrade<=0 || RiskPerTrade>0.005 || DailyLoss<=0 || DailyLoss>=1
+   if(!DemoBTC() || HistoryBars<7000 || RiskPerTrade<=0 || RiskPerTrade>0.005 || DailyLoss<=0 || DailyLoss>=1
       || MaxSpread<0 || SlippagePrice<0 || CommissionRoundtrip<0) return INIT_FAILED;
    accountId=AccountNumber(); serverId=AccountServer();
    FolderCreate(ResearchFolder,FILE_COMMON);
@@ -27,8 +29,8 @@ bool SameDemo() { return DemoBTC() && AccountNumber()==accountId && AccountServe
 void OnTimer() {
    if(!SameDemo() || !IsConnected()) return;
    datetime closed=iTime(Symbol(),PERIOD_M1,1)+60;
-   if(closed>60 && closed!=exported) {
-      if(ExportResearch(7000,"live")) exported=closed;
+   if(closed>60 && (closed!=exported || (uint)(GetTickCount()-lastExport)>=30000)) {
+      if(ExportResearch(HistoryBars,"live")) { exported=closed; lastExport=GetTickCount(); }
    }
    if(!EnableDemoOrders || !IsTradeAllowed() || OrdersTotal()!=0 || GlobalVariableCheck(uncertain)) return;
    if(FileIsExist(ResearchFolder+"\\STOP",FILE_COMMON)) return;

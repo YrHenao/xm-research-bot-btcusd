@@ -2,7 +2,7 @@
   "mode": "simulation",
   "account_currency": "USD",
   "initial_equity": 10000,
-  "history_bars": 7000,
+  "history_bars": 20000,
   "train_fraction": 0.7,
   "news": {
     "required": false,

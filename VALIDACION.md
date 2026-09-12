@@ -1,6 +1,10 @@
 # Validación
 
-Suite local: **32 tests Python aprobados** con Python 3.12, incluido lotaje 1,5x y target 3:1.
+Suite local: **34 tests Python aprobados** con Python 3.12, incluidos lotaje 1,5x,
+target 3:1, diagnostico de historial y rechazo de velas antiguas.
+EA actualizado compilado con MetaEditor XM MT4: **0 errores, 0 advertencias**.
+Ventana ampliada a 20.000 M1: en el historico disponible hay 29 H4 completas,
+frente a 8 con 7.000. La validacion de ejecucion demo sigue pendiente.
 
 Los tests Python verifican el motor común, las opciones stop/timeout, importación
 del contrato, emparejamiento CSV/metadatos, cuenta demo, rechazo de datos antiguos,

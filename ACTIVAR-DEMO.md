@@ -1,5 +1,12 @@
 # Activar BTCUSD demo: lotaje 1,5x y target 3:1
 
+Actualizacion de historial: EA `HistoryBars=20000` y JSON `history_bars=20000`.
+Copie y recompile el EA actualizado, y reinicie Python para cargar el cambio.
+El EA vuelve a publicar cada 30 segundos aunque no cambie la vela; el control
+de antiguedad de la vela sigue activo. La consola indica cuantos bloques
+completos tiene cada filtro y distingue datos insuficientes de falta de senal.
+El backtest anterior usaba 7.000 velas; sus resultados no validan esta ventana.
+
 Esta version usa riesgo nominal 0,375 % frente al 0,25 % anterior; equivale
 a multiplicar por 1,5 el volumen teorico antes de redondear al paso del broker.
 No equivale a usar 1,5 lotes fijos. Target 3:1, spread maximo 40 USD,

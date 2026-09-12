@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch
 from bot.market import Bar
 from bot.mt4_import import import_config
-from bot.mt4_bridge import command
+from bot.mt4_bridge import command, diagnostic
 from bot.compare import exposure
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -71,6 +71,21 @@ class MT4Tests(unittest.TestCase):
         previous=run({'bitcoin':bars},cfg,FileNews(None,required=False),signal_fn=once)['trades'][0]
         self.assertAlmostEqual(previous['lots'],3.12)
         self.assertAlmostEqual(current['lots']/previous['lots'],1.5)
+
+    def test_diagnostic_distinguishes_history_and_signal(self):
+        cfg,bars,meta=self.fixture()
+        d=diagnostic(cfg,meta,bars,None,{'score':1,'filters':{}})
+        self.assertEqual(d['estado'],'historial_insuficiente')
+        self.assertIn('240',d['marcos_insuficientes'])
+        cfg['strategy']['trend_frames']=[]
+        self.assertEqual(diagnostic(cfg,meta,bars,None,{'score':0})['estado'],'sin_senal_detectores')
+        self.assertEqual(diagnostic(cfg,meta,bars,None,{'score':1})['estado'],'filtros_no_confirman')
+
+    def test_stale_bar_not_accepted_with_fresh_snapshot(self):
+        cfg,bars,meta=self.fixture()
+        meta['server_time']=bars[-1].time+60+91
+        with self.assertRaisesRegex(ValueError,'diferencia servidor-cierre=91s'):
+            command(cfg,meta,bars)
 
     def test_exposure_counts_floating_and_realized_separately(self):
         cfg,_,_=self.fixture(); cfg['symbols']['bitcoin']['contract']['margin_per_lot']=1000

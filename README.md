@@ -1,5 +1,10 @@
 # BTCUSD — investigación y prueba demo en XM MT4
 
+Actualizacion: historial de entrada ampliado de 7.000 a 20.000 velas M1,
+actualizacion del snapshot cada 30 segundos y diagnosticos compactos de filtros.
+Se conservan los requisitos de bloques completos y frescura; no se rellenan huecos.
+Los resultados historicos previos corresponden a la ventana anterior de 7.000.
+
 Adaptación del núcleo de `xm-research-bot` de oro para BTCUSD. Mantiene los seis
 detectores Python, filtros M15/H1/H4, riesgo nominal 0,375 %, target 3:1, noticias
 desactivadas y stop/timeout opcionales (ambos desactivados en el ejemplo).
