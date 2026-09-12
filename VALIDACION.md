@@ -1,5 +1,12 @@
 # Validación
 
+Correccion nativa: **36 tests Python aprobados**. Comprueba filtros alcistas y
+bajistas con huecos en M1, rechazo de velas futuras/abiertas, filtros antiguos
+y snapshots de versiones previas. MetaEditor: **0 errores, 0 advertencias**.
+Pendiente: verificar la exportacion nativa del EA adjunto en MT4 y repetir
+backtesting con datos nativos historicos. Los resultados previos no son validacion
+de esta fuente nueva. Las pruebas no enviaron ordenes.
+
 Suite local: **34 tests Python aprobados** con Python 3.12, incluidos lotaje 1,5x,
 target 3:1, diagnostico de historial y rechazo de velas antiguas.
 EA actualizado compilado con MetaEditor XM MT4: **0 errores, 0 advertencias**.

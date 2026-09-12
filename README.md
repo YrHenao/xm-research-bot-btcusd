@@ -1,5 +1,13 @@
 # BTCUSD — investigación y prueba demo en XM MT4
 
+**Correccion de filtros:** el puente demo usa 21 velas cerradas NATIVAS de MT4
+para cada filtro M15/H1/H4. Comprueba orden, precios, cierre y antiguedad.
+No reconstruye esos filtros desde M1 ni rellena minutos faltantes.
+El EA y Python deben actualizarse juntos (protocolo 3).
+Los comandos offline replay/compare conservan el modelo anterior de agregacion;
+sus resultados NO validan esta nueva fuente de filtros. Falta exportar historial
+nativo por temporalidad y repetir la evaluacion con alineacion temporal.
+
 Actualizacion: historial de entrada ampliado de 7.000 a 20.000 velas M1,
 actualizacion del snapshot cada 30 segundos y diagnosticos compactos de filtros.
 Se conservan los requisitos de bloques completos y frescura; no se rellenan huecos.

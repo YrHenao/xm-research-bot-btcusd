@@ -1,5 +1,15 @@
 # Activar BTCUSD demo: lotaje 1,5x y target 3:1
 
+Correccion nativa: detenga Python con Ctrl+C, retire el EA del grafico y copie
+el nuevo `mt4/BTCResearchDemo.ex4` a MQL4/Experts. Vuelva a adjuntarlo con
+HistoryBars=20000, RiskPerTrade=0.00375, MaxSpread=40 y EnableDemoOrders=true.
+Retire STOP solo para reanudar y ejecute INICIAR-BTC-DEMO.cmd. No se cierran
+posiciones existentes. La consola debe indicar `fuente_filtros=mt4_native_closed`
+y mostrar cierre, media20, cierre_previo20 y edad de cada filtro.
+Si MT4 indica "Cargando historial nativo", abra los graficos M15, H1 y H4
+de BTCUSD y deje que descarguen al menos 21 velas cerradas por temporalidad.
+El EA actualizado rechaza comandos antiguos; mantenga Python y EA en la misma version.
+
 Actualizacion de historial: EA `HistoryBars=20000` y JSON `history_bars=20000`.
 Copie y recompile el EA actualizado, y reinicie Python para cargar el cambio.
 El EA vuelve a publicar cada 30 segundos aunque no cambie la vela; el control

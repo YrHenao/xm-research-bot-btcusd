@@ -10,6 +10,22 @@ bool DemoBTC() {
 bool Publish(string temp,string finalName) {
    return FileMove(temp,FILE_COMMON,finalName,FILE_COMMON|FILE_REWRITE);
 }
+bool NativeFrames(string &result) {
+   int frames[3]={15,60,240}; result="{";
+   for(int k=0;k<3;k++) {
+      MqlRates native[]; ArraySetAsSeries(native,false);
+      int copied=CopyRates(Symbol(),frames[k],1,21,native);
+      if(copied!=21) { Print("Cargando historial nativo ",frames[k],": ",copied,"/21"); return false; }
+      if(k>0) result+=",";
+      result+=J(IntegerToString(frames[k]))+":[";
+      for(int j=0;j<copied;j++) {
+         if(j>0) result+=",";
+         result+="["+IntegerToString((int)native[j].time)+","+N(native[j].close)+"]";
+      }
+      result+="]";
+   }
+   result+="}"; return true;
+}
 bool ExportResearch(int maxBars,string stem) {
    if(!DemoBTC()) { Print("Solo BTCUSD en cuenta DEMO USD"); return false; }
    int available=iBars(Symbol(),PERIOD_M1)-1;
@@ -30,6 +46,8 @@ bool ExportResearch(int maxBars,string stem) {
    }
    FolderCreate(ResearchFolder,FILE_COMMON);
    string base=ResearchFolder+"\\"+stem;
+   string nativeFrames="";
+   if(stem=="live" && !NativeFrames(nativeFrames)) return false;
    int f=FileOpen(base+".csv.tmp",FILE_WRITE|FILE_CSV|FILE_ANSI|FILE_COMMON,',');
    if(f==INVALID_HANDLE) return false;
    FileWrite(f,"time","open","high","low","close","spread");
@@ -58,7 +76,9 @@ bool ExportResearch(int maxBars,string stem) {
       ",\"min_stop\":"+N(MarketInfo(Symbol(),MODE_STOPLEVEL)*point)+
       ",\"margin_per_lot\":"+N(margin)+",\"tick_size\":"+N(tickSize)+
       ",\"tick_value\":"+N(tickValue)+",\"swap_long\":"+N(MarketInfo(Symbol(),MODE_SWAPLONG))+
-      ",\"swap_short\":"+N(MarketInfo(Symbol(),MODE_SWAPSHORT))+"}";
+      ",\"swap_short\":"+N(MarketInfo(Symbol(),MODE_SWAPSHORT));
+   if(stem=="live") metadata+=",\"filter_source\":\"mt4_native_closed\",\"native_frames\":"+nativeFrames;
+   metadata+="}";
    f=FileOpen(base+".json.tmp",FILE_WRITE|FILE_TXT|FILE_ANSI|FILE_COMMON,0,CP_UTF8);
    if(f==INVALID_HANDLE) return false;
    FileWriteString(f,metadata); FileFlush(f); FileClose(f);

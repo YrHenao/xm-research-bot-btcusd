@@ -44,7 +44,7 @@ void OnTimer() {
    int stopEnabled=(int)FileReadNumber(f);
    double requestedRisk=FileReadNumber(f);
    FileClose(f);
-   if(version!=2 || login!=accountId || server!=serverId || symbol!=Symbol() || bar!=closed
+   if(version!=3 || login!=accountId || server!=serverId || symbol!=Symbol() || bar!=closed
       || (side!=1 && side!=-1) || !MathIsValidNumber(distance) || distance<=0
       || !MathIsValidNumber(ratio) || ratio!=3.0 || (stopEnabled!=0 && stopEnabled!=1)
       || !MathIsValidNumber(requestedRisk) || MathAbs(requestedRisk-RiskPerTrade)>0.000000001) return;

@@ -62,11 +62,11 @@ def analyze(bars,cfg):
     return out
 
 
-def decide(bars,cfg,enabled=None):
+def decide(bars,cfg,enabled=None,higher_frames=None):
     signals=analyze(bars,cfg); names=cfg['enabled'] if enabled is None else enabled; votes=[signals[n]['side'] for n in names]; score=sum(votes)
     side=(1 if score>0 else -1) if abs(score)>=cfg['min_votes'] else 0; filters={}
     for minutes in cfg['trend_frames']:
-        higher=aggregate(bars,minutes); n=cfg['trend_period']
+        higher=aggregate(bars,minutes) if higher_frames is None else higher_frames[minutes]; n=cfg['trend_period']
         direction=0 if len(higher)<n+1 else (1 if higher[-1].close>sum(b.close for b in higher[-n:])/n and higher[-1].close>higher[-n-1].close else -1 if higher[-1].close<sum(b.close for b in higher[-n:])/n and higher[-1].close<higher[-n-1].close else 0)
         filters[str(minutes)]=direction
         if direction!=side: side=0
